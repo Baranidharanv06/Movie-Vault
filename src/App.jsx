@@ -3,7 +3,7 @@ import './App.css'; // Import the CSS file
 
 // --- Configuration ---
 // IMPORTANT: You MUST get your own free API key from themoviedb.org
-const API_KEY_VALUE = 'f0dbfcd38c293fc33e869277548c9926'; // <-- PASTE YOUR 32-CHARACTER KEY HERE
+const API_KEY_VALUE = 'f0dbfcd38c293fc33e869277548c9926'; 
 const API_URL_PARAM = `api_key=${API_KEY_VALUE}`;
 
 const BASE_URL = 'https://api.themoviedb.org/3';
