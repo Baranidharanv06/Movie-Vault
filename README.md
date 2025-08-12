@@ -3,7 +3,7 @@
 A modern, responsive web application for discovering the latest trending movies and TV shows. Users can search for content, view details and trailers, and bookmark their favorites for later.
 
 **Live Demo:** [https://movie-vault-your-url.vercel.app](https://movie-vault-your-url.vercel.app) 
-*(Replace this with your actual Vercel deployment link!)*
+
 
 
 ---
