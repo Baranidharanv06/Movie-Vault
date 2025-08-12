@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import './App.css'; // Import the CSS file
+import './App.css';
 
 // --- Configuration ---
-// IMPORTANT: You MUST get your own free API key from themoviedb.org
-const API_KEY_VALUE = 'f0dbfcd38c293fc33e869277548c9926'; 
+// This now securely reads the key you set in Vercel
+const API_KEY_VALUE = import.meta.env.VITE_TMDB_API_KEY; 
 const API_URL_PARAM = `api_key=${API_KEY_VALUE}`;
 
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -54,9 +54,9 @@ const MovieCard = ({ movie, onCardClick, onBookmark, isBookmarked }) => {
   if (!poster_path) return null;
 
   return (
-    <div className="movie-card">
+    <div className="movie-card" onClick={() => onCardClick(movie)}>
       <div className="card-content">
-        <img src={`${IMG_URL}${poster_path}`} alt={movieTitle} className="card-poster" onClick={() => onCardClick(movie)} />
+        <img src={`${IMG_URL}${poster_path}`} alt={movieTitle} className="card-poster" />
         <div 
           onClick={(e) => {
             e.stopPropagation();
@@ -67,9 +67,9 @@ const MovieCard = ({ movie, onCardClick, onBookmark, isBookmarked }) => {
           <StarIcon className="star-icon" />
         </div>
         <div className="card-rating">{vote_average.toFixed(1)}</div>
-        <div className="card-info" onClick={() => onCardClick(movie)}>
-          <h3 className="card-title">{movieTitle}</h3>
-        </div>
+      </div>
+      <div className="card-info">
+        <h3 className="card-title">{movieTitle}</h3>
       </div>
     </div>
   );
@@ -115,6 +115,17 @@ const MovieModal = ({ movie, trailerKey, onClose }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <div className="container footer-content">
+        <p>&copy; {new Date().getFullYear()} MovieVault. Created by Barani.</p>
+        <p>Movie data provided by <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">TMDb</a>.</p>
+      </div>
+    </footer>
   );
 };
 
@@ -223,31 +234,33 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <header className="header">
-        <div className="container header-content">
-          <h1 className="logo">MovieVault</h1>
-          <nav className="main-nav">
-            <button 
-              onClick={() => setActiveSection('trending')}
-              className={`nav-button ${activeSection === 'trending' ? 'active' : ''}`}
-            >
-              Trending
-            </button>
-            <button 
-              onClick={() => setActiveSection('bookmarks')}
-              className={`nav-button ${activeSection === 'bookmarks' ? 'active' : ''}`}
-            >
-              Bookmarks
-            </button>
-          </nav>
-          <SearchBar onSearch={handleSearch} />
-        </div>
-      </header>
+      <div className="content-wrap">
+        <header className="header">
+          <div className="container header-content">
+            <h1 className="logo">MovieVault</h1>
+            <nav className="main-nav">
+              <button 
+                onClick={() => setActiveSection('trending')}
+                className={`nav-button ${activeSection === 'trending' ? 'active' : ''}`}
+              >
+                Trending
+              </button>
+              <button 
+                onClick={() => setActiveSection('bookmarks')}
+                className={`nav-button ${activeSection === 'bookmarks' ? 'active' : ''}`}
+              >
+                Bookmarks
+              </button>
+            </nav>
+            <SearchBar onSearch={handleSearch} />
+          </div>
+        </header>
 
-      <main className="container">
-        <h2 className="section-title">{sectionTitle}</h2>
-        {renderContent()}
-      </main>
+        <main className="container">
+          <h2 className="section-title">{sectionTitle}</h2>
+          {renderContent()}
+        </main>
+      </div>
 
       {selectedMovie && (
         <MovieModal 
@@ -256,6 +269,8 @@ export default function App() {
           onClose={() => setSelectedMovie(null)} 
         />
       )}
+      
+      <Footer />
     </div>
   );
 }
